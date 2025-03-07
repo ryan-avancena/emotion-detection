@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prediction App Title</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<h1>REVIEW SENTIMENT ANALYSIS</h1>
+
+<form action="/predict" method='POST'>
+    <textarea id="review" name="sentence" placeholder="i am so sad"></textarea>
+    <p><button type="submit">submit</button></p>
+</form>
+</body>
+</html>

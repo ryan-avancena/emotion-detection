@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #radarChart {
+            width: 200px;  
+            height: 200px; 
+        }
+        canvas {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Sentence: {{ sentence }}</p>
+    <p>Naive Bayes Label: {{ nb_label }}</p>
+    <p>RNN Label: {{ rnn_label }}</p>
+
+    <canvas id="radarChart"></canvas>
+    <script>
+        const emotions = {{ emotions | tojson }};
+        const nb_values = {{ nb_values | tojson }};
+        const rnn_values = {{ rnn_values | tojson }};
+        
+
+        const data = {
+            labels: emotions,  
+            datasets: [
+                {
+                    label: 'Naïve Bayes',
+                    data: nb_values,  // Naive Bayes probabilities
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(255, 99, 132)'
+                },
+                {
+                    label: 'RNN',
+                    data: rnn_values,  // RNN probabilities
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }
+            ]
+        };
+
+        const config = {
+            type: 'radar',
+            data: data,
+            options: {
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                }
+            },
+        };
+
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctx, config);
+    </script>
+</body>
+</html>
