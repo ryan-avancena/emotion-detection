@@ -1,8 +1,10 @@
 import nltk
+nltk.download('stopwords')
+nltk.download('punkt_tab')
+
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
-nltk.download('stopwords')
 
 def preprocess(text):
     text = text.lower()
