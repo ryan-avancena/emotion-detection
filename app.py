@@ -3,15 +3,16 @@ from tensorflow import keras
 import numpy as np
 import joblib
 import keras
+from flask_cors import CORS 
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from helper import preprocess_input, preprocess
 
 app = Flask(__name__)
 
-nb_model = joblib.load('./emotion_detection_nb.joblib')
-tf_idf = joblib.load('./tfidf.joblib')
-rnn_model = keras.models.load_model('./emotion_classifier_model.keras')
-tokenizer = joblib.load('./tokenizer.joblib')
+nb_model = joblib.load('./models/emotion_detection_nb.joblib')
+tf_idf = joblib.load('./models/tfidf.joblib')
+rnn_model = keras.models.load_model('./models/emotion_classifier_model.keras')
+tokenizer = joblib.load('./models/tokenizer.joblib')
 
 @app.route('/')
 def index():
@@ -22,7 +23,7 @@ def predict():
     sentence = request.form.get('sentence')
 
     if not sentence:
-        return render_template('predict.html')
+        return render_template('./templates/predict.html')
 
     nb_features = tf_idf.transform([sentence])
     nb_prediction = nb_model.predict_proba(nb_features)[0]
@@ -48,6 +49,5 @@ def predict():
                            nb_values=list(nb_results.values()), 
                            rnn_values=list(rnn_results.values()))
 
-if __name__ == '__main__':
-    app.run(debug=True)
-    
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001, debug=True)
